@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background circle with subtle pulse animation -->
+  <circle cx="50" cy="50" r="48" fill="#6366f1" opacity="0.1">
+    <animate 
+      attributeName="r" 
+      values="46;48;46" 
+      dur="3s" 
+      repeatCount="indefinite" 
+    />
+  </circle>
+  
+  <!-- Stylized 'A' centered in new viewport -->
+  <path 
+    d="M25 85 L50 15 L75 85 Z" 
+    fill="none" 
+    stroke="#6366f1" 
+    stroke-width="6"
+    stroke-linejoin="round"
+  />
+  
+  <!-- Dot for 'i' -->
+  <circle 
+    cx="82" 
+    cy="25" 
+    r="5" 
+    fill="#8b5cf6"
+  >
+    <animate
+      attributeName="opacity"
+      values="0.8;1;0.8"
+      dur="2s"
+      repeatCount="indefinite"
+    />
+  </circle>
+  
+  <!-- Lightning bolt with animation -->
+  <path 
+    d="M82 40 L75 55 L82 55 L75 70" 
+    fill="none" 
+    stroke="#8b5cf6" 
+    stroke-width="6" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+  >
+    <animate
+      attributeName="stroke-width"
+      values="6;7;6"
+      dur="2s"
+      repeatCount="indefinite"
+    />
+  </path>
+</svg>

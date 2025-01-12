@@ -1,4 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AiLert ![logo.svg](public/logo.svg)
+
+The Open Source AI Newsletter Platform. AiLert is a community-driven initiative to democratize access to AI knowledge and insights.
+
+## Features
+
+- 💌 Free AI Newsletter: Stay updated with the latest in artificial intelligence
+- 🤝 Community Driven: Built by the community, for the community
+- 🌐 Open Source: Transparent and accessible to everyone
+- ⚡ Real-time Updates: Get timely insights about AI developments
+
+## Tech Stack
+
+- Frontend: Next.js with Tailwind CSS
+- Backend: Python Flask
+- Deployment: Docker containerization
+
+## Getting Started
+
+1. Clone the repository
+
+````bash
+git clone https://github.com/anuj0456/ailert.git
+cd ailert
 
 ## Getting Started
 
@@ -12,7 +35,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
