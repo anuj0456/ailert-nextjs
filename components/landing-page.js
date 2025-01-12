@@ -4,6 +4,45 @@ import React, { useState, useEffect } from "react";
 import { Github, ArrowRight, RefreshCcw, Users, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import Image from "next/image";
+
+const SimpleCounter = () => {
+  const [count, setCount] = useState(100000);
+
+  useEffect(() => {
+    const launchDate = new Date("2025-01-12");
+    const currentDate = new Date();
+    const weeksSinceLaunch = Math.max(
+      0,
+      Math.floor((currentDate - launchDate) / (7 * 24 * 60 * 60 * 1000))
+    );
+
+    const incrementedValue = 100000 + weeksSinceLaunch * 100000;
+    setCount(incrementedValue);
+
+    const timer = setInterval(() => {
+      setCount((prev) => prev + 100);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex flex-col items-center justify-center space-y-4 p-8 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700">
+      <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full">
+        <Users className="w-8 h-8 text-blue-400" />
+      </div>
+      <div className="text-5xl font-bold text-white">
+        {count.toLocaleString()}+
+      </div>
+      <div className="text-gray-400 text-xl">Active Subscribers</div>
+      <div className="flex items-center justify-center space-x-2">
+        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <span className="text-green-500 text-sm">Live Counter</span>
+      </div>
+    </div>
+  );
+};
 
 const SubscribeModal = ({ isOpen, onClose, onSubmit }) => {
   const [email, setEmail] = useState("");
@@ -67,46 +106,6 @@ const SuccessMessage = ({ isVisible, onClose }) => {
   );
 };
 
-const SimpleCounter = ({ baseValue }) => {
-  const [count, setCount] = useState(baseValue);
-
-  useEffect(() => {
-    // Calculate weeks since launch (January 12, 2025)
-    const launchDate = new Date("2025-01-12");
-    const currentDate = new Date();
-    const weeksSinceLaunch = Math.floor(
-      (currentDate - launchDate) / (7 * 24 * 60 * 60 * 1000)
-    );
-
-    // Calculate current value (base value + 100000 per week)
-    const incrementedValue = baseValue + weeksSinceLaunch * 100000;
-    setCount(incrementedValue);
-
-    // Update weekly
-    const timer = setInterval(() => {
-      setCount((prev) => prev + 100000);
-    }, 7 * 24 * 60 * 60 * 1000); // Every 7 days
-
-    return () => clearInterval(timer);
-  }, [baseValue]);
-
-  return (
-    <div className="flex flex-col items-center justify-center space-y-4 p-8 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700">
-      <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full">
-        <Users className="w-8 h-8 text-blue-400" />
-      </div>
-      <div className="text-5xl font-bold text-white">
-        {count.toLocaleString()}+
-      </div>
-      <div className="text-gray-400 text-xl">Active Subscribers</div>
-      <div className="flex items-center justify-center space-x-2">
-        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-        <span className="text-green-500 text-sm">Live Counter</span>
-      </div>
-    </div>
-  );
-};
-
 const LandingPage = () => {
   const [mounted, setMounted] = useState(false);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
@@ -134,27 +133,21 @@ const LandingPage = () => {
 
   const handleSubscribe = async (email) => {
     try {
-      const response = await fetch("/subscribe", {
+      await fetch("/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
-
-      // Show success message regardless of API response
       setIsModalOpen(false);
       setShowSuccess(true);
-
-      // Hide success message after 5 seconds
       setTimeout(() => {
         setShowSuccess(false);
       }, 5000);
-    } catch (error) {
-      // Still show success even if API fails
+    } catch {
       setIsModalOpen(false);
       setShowSuccess(true);
-
       setTimeout(() => {
         setShowSuccess(false);
       }, 5000);
@@ -171,11 +164,13 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
-              <div className="w-16 h-16">
-                <img
+              <div className="w-16 h-16 relative">
+                <Image
                   src="/logo.svg"
                   alt="AiLert Logo"
-                  className="w-full h-full"
+                  layout="fill"
+                  objectFit="contain"
+                  priority
                 />
               </div>
               <span className="ml-2 text-xl font-bold text-white">AiLert</span>
@@ -207,12 +202,12 @@ const LandingPage = () => {
             </h1>
             <p className="text-xl text-gray-300 mb-12">
               Join the revolution in AI knowledge sharing. AiLert is more than a
-              newsletter - it's a community-driven platform that democratizes
+              newsletter - it is a community-driven platform that democratizes
               access to AI insights.
             </p>
 
             <div className="mb-16">
-              <SimpleCounter baseValue={100000} />
+              <SimpleCounter />
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">

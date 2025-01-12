@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "components/ui/button.js",
     "tailwind.config.js",
-    "app/page.js"
+    "app/page.js",
+    "next.config.js"
   ],
   "exclude": ["node_modules"]
 }
