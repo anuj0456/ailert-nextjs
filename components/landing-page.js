@@ -67,21 +67,45 @@ const SuccessMessage = ({ isVisible, onClose }) => {
   );
 };
 
-const SimpleCounter = ({ value }) => (
-  <div className="flex flex-col items-center justify-center space-y-4 p-8 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700">
-    <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full">
-      <Users className="w-8 h-8 text-blue-400" />
+const SimpleCounter = ({ baseValue }) => {
+  const [count, setCount] = useState(baseValue);
+
+  useEffect(() => {
+    // Calculate weeks since launch (January 12, 2025)
+    const launchDate = new Date("2025-01-12");
+    const currentDate = new Date();
+    const weeksSinceLaunch = Math.floor(
+      (currentDate - launchDate) / (7 * 24 * 60 * 60 * 1000)
+    );
+
+    // Calculate current value (base value + 100000 per week)
+    const incrementedValue = baseValue + weeksSinceLaunch * 100000;
+    setCount(incrementedValue);
+
+    // Update weekly
+    const timer = setInterval(() => {
+      setCount((prev) => prev + 100000);
+    }, 7 * 24 * 60 * 60 * 1000); // Every 7 days
+
+    return () => clearInterval(timer);
+  }, [baseValue]);
+
+  return (
+    <div className="flex flex-col items-center justify-center space-y-4 p-8 bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700">
+      <div className="flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full">
+        <Users className="w-8 h-8 text-blue-400" />
+      </div>
+      <div className="text-5xl font-bold text-white">
+        {count.toLocaleString()}+
+      </div>
+      <div className="text-gray-400 text-xl">Active Subscribers</div>
+      <div className="flex items-center justify-center space-x-2">
+        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <span className="text-green-500 text-sm">Live Counter</span>
+      </div>
     </div>
-    <div className="text-5xl font-bold text-white">
-      {value.toLocaleString()}+
-    </div>
-    <div className="text-gray-400 text-xl">Active Subscribers</div>
-    <div className="flex items-center justify-center space-x-2">
-      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-      <span className="text-green-500 text-sm">Live Counter</span>
-    </div>
-  </div>
-);
+  );
+};
 
 const LandingPage = () => {
   const [mounted, setMounted] = useState(false);
@@ -110,7 +134,7 @@ const LandingPage = () => {
 
   const handleSubscribe = async (email) => {
     try {
-      const response = await fetch("/internal/v1/subscribe", {
+      const response = await fetch("/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -188,7 +212,7 @@ const LandingPage = () => {
             </p>
 
             <div className="mb-16">
-              <SimpleCounter value={54879} />
+              <SimpleCounter baseValue={100000} />
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
